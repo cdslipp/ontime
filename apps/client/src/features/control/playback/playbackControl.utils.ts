@@ -34,7 +34,7 @@ export interface PlaybackControlState {
   disableReload: boolean;
   disableAddTime: boolean;
 
-  // Go button configuration
+  // Go button configuration (used by TrackingPlaybackBar)
   goAction: () => void;
   goLabel: 'Start' | 'Next' | 'Finish';
 }
@@ -54,15 +54,20 @@ export function getPlaybackControlState({
   const noEvents = numEvents === 0;
   const isRolling = playback === Playback.Roll;
 
+  const isPlaying = playback === Playback.Play;
+  const isPaused = playback === Playback.Pause;
+  const isArmed = playback === Playback.Armed;
+  const isStopped = playback === Playback.Stop;
+
   const playbackCan = validatePlayback(playback, timerPhase);
-  const { action: goAction, label: goLabel } = getGoAction(playback, selectedEventIndex, isLast);
+  const go = getGoAction(playback, selectedEventIndex, isLast);
 
   return {
-    isPlaying: playback === Playback.Play,
-    isPaused: playback === Playback.Pause,
+    isPlaying,
+    isPaused,
     isRolling,
-    isArmed: playback === Playback.Armed,
-    isStopped: playback === Playback.Stop,
+    isArmed,
+    isStopped,
     isFirst,
     isLast,
     noEvents,
@@ -75,8 +80,8 @@ export function getPlaybackControlState({
     disableStop: !playbackCan.stop,
     disableReload: !playbackCan.reload,
     disableAddTime: playback !== Playback.Play && playback !== Playback.Pause,
-    goAction,
-    goLabel,
+    goAction: go.action,
+    goLabel: go.label,
   };
 }
 
