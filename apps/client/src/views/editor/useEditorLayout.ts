@@ -6,6 +6,7 @@ const layoutParam = 'layout';
 export enum EditorLayoutMode {
   CONTROL = 'control',
   PLANNING = 'planning',
+  SIMPLE = 'simple',
   TRACKING = 'tracking',
 }
 

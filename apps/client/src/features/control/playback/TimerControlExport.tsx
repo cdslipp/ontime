@@ -6,13 +6,18 @@ import ViewNavigationMenu from '../../../common/components/navigation-menu/ViewN
 import ProtectRoute from '../../../common/components/protect-route/ProtectRoute';
 import { handleLinks } from '../../../common/utils/linkUtils';
 import { getIsNavigationLocked } from '../../../externals';
+import { EditorLayoutMode, useEditorLayout } from '../../../views/editor/useEditorLayout';
 import PlaybackControl from './PlaybackControl';
+import SimplePlaybackControl from './simple/SimplePlaybackControl';
 
 import style from './TimerControlExport.module.scss';
 
 export default memo(TimerControlExport);
 function TimerControlExport() {
   const isExtracted = window.location.pathname.includes('/timercontrol');
+  const { layoutMode } = useEditorLayout();
+
+  const useSimple = layoutMode === EditorLayoutMode.SIMPLE && !isExtracted;
 
   return (
     <ProtectRoute permission='editor'>
@@ -22,7 +27,7 @@ function TimerControlExport() {
 
         <div className={style.content}>
           <ErrorBoundary>
-            <PlaybackControl />
+            {useSimple ? <SimplePlaybackControl /> : <PlaybackControl />}
           </ErrorBoundary>
         </div>
       </Editor.Panel>

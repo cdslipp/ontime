@@ -2,33 +2,39 @@
   padding-top: $element-spacing;
   display: grid;
   grid-template-areas:
-    'main roll stop'
-    'prev pause next';
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 4rem 2rem;
+    'go playback'
+    'go transport'
+    'extra extra';
+  grid-template-rows: repeat(3, 2rem);
   gap: $element-spacing;
 }
 
-.main {
-  grid-area: main;
+.go {
+  grid-area: go;
+  font-size: 5rem;
 }
 
-.roll {
-  grid-area: roll;
+@mixin spaced-flex {
+  display: flex;
+  justify-content: space-evenly;
+  gap: $element-spacing;
 }
 
-.stop {
-  grid-area: stop;
+.playbackContainer {
+  grid-area: playback;
+  @include spaced-flex;
 }
 
-.prev {
-  grid-area: prev;
+.transportContainer {
+  grid-area: transport;
+  @include spaced-flex;
 }
 
-.pause {
-  grid-area: pause;
+.extra {
+  grid-area: extra;
+  @include spaced-flex;
 }
 
-.next {
-  grid-area: next;
+.invertX {
+  transform: rotateY(180deg);
 }

@@ -1,5 +1,5 @@
-.growPanel {
-  flex: 1;
+.section {
+  padding: 0.5rem;
 }
 
 .sectionHeader {
@@ -10,7 +10,6 @@
   cursor: pointer;
   color: $ui-white;
   font-size: 1rem;
-  padding: 0 0.5rem;
 }
 
 .closed {
@@ -23,12 +22,10 @@
   rotate: 180deg;
 }
 
-.contentLayout {
-  display: flex;
-  flex-direction: column;
-  gap: $section-spacing;
-  color: $ui-white;
-  padding-top: $panel-top-padding;
+.auxTimers {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
 }
 
 .hidden {

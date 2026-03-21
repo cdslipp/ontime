@@ -1,6 +1,5 @@
 import { Playback, TimerPhase } from 'ontime-types';
-import { FaRegClock } from 'react-icons/fa';
-import { IoPause, IoPlay, IoPlaySkipBack, IoPlaySkipForward, IoStop } from 'react-icons/io5';
+import { IoPause, IoPlay, IoPlaySkipBack, IoPlaySkipForward, IoReload, IoStop } from 'react-icons/io5';
 
 import { setPlayback } from '../../../../common/hooks/useSocket';
 import { getPlaybackControlState } from '../playbackControl.utils';
@@ -23,9 +22,13 @@ export default function PlaybackButtons({ playback, numEvents, selectedEventInde
     disableGo,
     disableNext,
     disablePrev,
+    disableStart,
+    disablePause,
     disableRoll,
     disableStop,
+    disableReload,
     goAction,
+    goLabel,
   } = getPlaybackControlState({
     playback,
     numEvents,
@@ -35,60 +38,37 @@ export default function PlaybackButtons({ playback, numEvents, selectedEventInde
 
   return (
     <div className={style.buttonContainer}>
-      {/* Top row: GO, Roll, Stop */}
-      <TapButton
-        onClick={goAction}
-        disabled={disableGo}
-        aspect='fill'
-        className={style.main}
-        theme={Playback.Play}
-      >
-        GO
+      <TapButton disabled={disableGo} onClick={goAction} aspect='fill' className={style.go}>
+        {goLabel}
       </TapButton>
+      <div className={style.playbackContainer}>
+        <TapButton onClick={setPlayback.start} disabled={disableStart} theme={Playback.Play} active={isPlaying}>
+          <IoPlay />
+        </TapButton>
 
-      <TapButton
-        onClick={isRolling ? setPlayback.start : setPlayback.roll}
-        disabled={disableRoll}
-        aspect='fill'
-        className={style.roll}
-        theme={Playback.Roll}
-        active={isRolling}
-      >
-        <FaRegClock />
-      </TapButton>
-
-      <TapButton
-        onClick={setPlayback.stop}
-        disabled={disableStop}
-        aspect='fill'
-        className={style.stop}
-        theme={Playback.Stop}
-      >
-        <IoStop />
-      </TapButton>
-
-      {/* Bottom row: Prev, Play/Pause, Next */}
-      <TapButton
-        onClick={setPlayback.previous}
-        disabled={disablePrev}
-        className={style.prev}
-      >
-        <IoPlaySkipBack />
-      </TapButton>
-
-      <TapButton
-        onClick={isPaused ? setPlayback.start : setPlayback.pause}
-        disabled={!isPlaying && !isPaused}
-        theme={isPaused ? Playback.Play : Playback.Pause}
-        active={isPaused}
-        className={style.pause}
-      >
-        {isPaused ? <IoPlay /> : <IoPause />}
-      </TapButton>
-
-      <TapButton onClick={setPlayback.next} disabled={disableNext} className={style.next}>
-        <IoPlaySkipForward />
-      </TapButton>
+        <TapButton onClick={setPlayback.pause} disabled={disablePause} theme={Playback.Pause} active={isPaused}>
+          <IoPause />
+        </TapButton>
+      </div>
+      <div className={style.transportContainer}>
+        <TapButton onClick={setPlayback.previous} disabled={disablePrev}>
+          <IoPlaySkipBack />
+        </TapButton>
+        <TapButton onClick={setPlayback.next} disabled={disableNext}>
+          <IoPlaySkipForward />
+        </TapButton>
+      </div>
+      <div className={style.extra}>
+        <TapButton onClick={setPlayback.roll} disabled={disableRoll} theme={Playback.Roll} active={isRolling}>
+          Roll
+        </TapButton>
+        <TapButton onClick={setPlayback.reload} disabled={disableReload}>
+          <IoReload className={style.invertX} />
+        </TapButton>
+        <TapButton onClick={setPlayback.stop} disabled={disableStop} theme={Playback.Stop}>
+          <IoStop />
+        </TapButton>
+      </div>
     </div>
   );
 }

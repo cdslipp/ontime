@@ -10,9 +10,23 @@ import styles from './Editor.module.scss';
 const Rundown = lazy(() => import('../../features/rundown/RundownExport'));
 const TimerControl = lazy(() => import('../../features/control/playback/TimerControlExport'));
 const MessageControl = lazy(() => import('../../features/control/message/MessageControlExport'));
+const AuxTimerSection = lazy(() => import('../../features/control/playback/aux-timer/AuxTimerSection'));
 
 export default function Editor() {
   const { layoutMode } = useEditorLayout();
+
+  if (layoutMode === EditorLayoutMode.SIMPLE) {
+    return (
+      <div id='panels' className={styles.panelContainer}>
+        <div className={styles.left}>
+          <TimerControl />
+          <AuxTimerSection />
+          <MessageControl />
+        </div>
+        <Rundown />
+      </div>
+    );
+  }
 
   if (layoutMode === EditorLayoutMode.CONTROL) {
     return (

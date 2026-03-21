@@ -1,0 +1,34 @@
+.buttonContainer {
+  padding-top: $element-spacing;
+  display: grid;
+  grid-template-areas:
+    'main roll stop'
+    'prev pause next';
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 4rem 2rem;
+  gap: $element-spacing;
+}
+
+.main {
+  grid-area: main;
+}
+
+.roll {
+  grid-area: roll;
+}
+
+.stop {
+  grid-area: stop;
+}
+
+.prev {
+  grid-area: prev;
+}
+
+.pause {
+  grid-area: pause;
+}
+
+.next {
+  grid-area: next;
+}

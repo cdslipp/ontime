@@ -33,6 +33,13 @@ function EditorLayoutOptions() {
         icon: layoutMode === EditorLayoutMode.CONTROL ? IoCheckmark : undefined,
         onClick: () => setLayoutMode(EditorLayoutMode.CONTROL),
       },
+      {
+        type: 'item',
+        label: 'Simple',
+        description: 'Streamlined controls with collapsible sections',
+        icon: layoutMode === EditorLayoutMode.SIMPLE ? IoCheckmark : undefined,
+        onClick: () => setLayoutMode(EditorLayoutMode.SIMPLE),
+      },
     ],
     [layoutMode, setLayoutMode],
   );

@@ -37,6 +37,11 @@ export const HEADER_CONTROLS_CONFIG: Record<EditorLayoutMode, HeaderControlsConf
     showOffsetToggle: false,
     showOverflowMenu: true,
   },
+  [EditorLayoutMode.SIMPLE]: {
+    showRunEditToggle: true,
+    showOffsetToggle: true,
+    showOverflowMenu: true,
+  },
   [EditorLayoutMode.TRACKING]: {
     showRunEditToggle: false,
     showOffsetToggle: true,

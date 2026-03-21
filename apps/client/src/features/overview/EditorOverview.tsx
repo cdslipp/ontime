@@ -25,6 +25,7 @@ function EditorOverview({ children }: PropsWithChildren) {
       {layoutMode === EditorLayoutMode.PLANNING && <OverviewPlanning />}
       {layoutMode === EditorLayoutMode.TRACKING && <OverviewTracking />}
       {layoutMode === EditorLayoutMode.CONTROL && <OverviewControl />}
+      {layoutMode === EditorLayoutMode.SIMPLE && <OverviewControl />}
     </OverviewWrapper>
   );
 }

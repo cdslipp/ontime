@@ -1,0 +1,10 @@
+.addTime {
+  grid-area: addtime;
+  display: flex;
+  flex-direction: column;
+  gap: $element-inner-spacing;
+}
+
+.button {
+  width: 3rem;
+}

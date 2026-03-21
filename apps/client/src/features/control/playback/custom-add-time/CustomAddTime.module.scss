@@ -1,0 +1,11 @@
+.customAddTime {
+  padding-top: $element-spacing;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 2rem;
+  gap: $element-spacing;
+
+  input {
+    max-width: unset;
+  }
+}

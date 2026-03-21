@@ -25,14 +25,14 @@ export function useEditorFollowMode() {
 
   // Derive editor mode from layout mode
   const editorMode = (() => {
-    if (layoutMode === EditorLayoutMode.CONTROL) return controlModePreference;
+    if (layoutMode === EditorLayoutMode.CONTROL || layoutMode === EditorLayoutMode.SIMPLE) return controlModePreference;
     if (layoutMode === EditorLayoutMode.PLANNING) return AppMode.Edit;
     return AppMode.Run;
   })();
 
-  // setEditorMode only affects CONTROL layout
+  // setEditorMode only affects CONTROL and SIMPLE layouts
   const setEditorMode = (mode: AppMode) => {
-    if (layoutMode === EditorLayoutMode.CONTROL) {
+    if (layoutMode === EditorLayoutMode.CONTROL || layoutMode === EditorLayoutMode.SIMPLE) {
       setControlModePreference(mode);
     }
   };
