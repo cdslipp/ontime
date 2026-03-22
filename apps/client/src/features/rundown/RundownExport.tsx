@@ -1,4 +1,4 @@
-import { useSessionStorage } from '@mantine/hooks';
+import { useLocalStorage, useSessionStorage } from '@mantine/hooks';
 import { memo } from 'react';
 
 import * as Editor from '../../common/components/editor-utils/EditorUtils';
@@ -62,10 +62,13 @@ function RundownExport() {
     );
   }
 
+  const [editorCollapsed] = useLocalStorage({ key: 'ontime-simple-editor-collapsed', defaultValue: false });
+
   const hideSideBar =
     layoutMode === EditorLayoutMode.TRACKING ||
     (isExtracted && editorMode === AppMode.Run) ||
-    viewMode === RundownViewMode.Table;
+    viewMode === RundownViewMode.Table ||
+    (layoutMode === EditorLayoutMode.SIMPLE && editorCollapsed);
 
   return (
     <EntryActionsProvider actions={entryActions}>
@@ -76,7 +79,7 @@ function RundownExport() {
           <div className={style.rundown}>
             <Editor.Panel className={style.list}>
               <ErrorBoundary>
-                {!isExtracted && <Editor.CornerExtract onClick={(event) => handleLinks('rundown', event)} />}
+                {!isExtracted && layoutMode !== EditorLayoutMode.SIMPLE && <Editor.CornerExtract onClick={(event) => handleLinks('rundown', event)} />}
                 <RundownRoot isExtracted={isExtracted} viewMode={viewMode} setViewMode={setViewMode} />
                 <RundownContextMenu />
               </ErrorBoundary>

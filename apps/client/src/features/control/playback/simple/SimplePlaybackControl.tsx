@@ -1,4 +1,5 @@
 import { usePlaybackControl } from '../../../../common/hooks/useSocket';
+import { useRuntimeStore } from '../../../../common/stores/runtime';
 import CustomAddTime from '../custom-add-time/CustomAddTime';
 import PlaybackTimer from '../playback-timer/PlaybackTimer';
 import { usePlaybackKeyboard } from '../usePlaybackKeyboard';
@@ -9,6 +10,7 @@ import style from './SimplePlaybackControl.module.scss';
 
 export default function SimplePlaybackControl() {
   const data = usePlaybackControl();
+  const eventTitle = useRuntimeStore((state) => state.eventNow?.title ?? '');
 
   usePlaybackKeyboard({
     playback: data.playback,
@@ -19,6 +21,7 @@ export default function SimplePlaybackControl() {
 
   return (
     <div className={style.mainContainer}>
+      {eventTitle && <div className={style.eventTitle}>{eventTitle}</div>}
       <PlaybackTimer>
         <SimpleAddTime playback={data.playback} />
       </PlaybackTimer>

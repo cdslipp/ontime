@@ -6,6 +6,7 @@ import SwatchSelect from '../../../../common/components/input/colour-input/Swatc
 import Input from '../../../../common/components/input/input/Input';
 import Switch from '../../../../common/components/switch/Switch';
 import { useEntryActionsContext } from '../../../../common/context/EntryActionsContext';
+import { EditorLayoutMode, useEditorLayout } from '../../../../views/editor/useEditorLayout';
 import EventTextArea from './EventTextArea';
 import EntryEditorTextInput from './EventTextInput';
 
@@ -23,6 +24,8 @@ interface EventEditorTitlesProps {
 export default memo(EventEditorTitles);
 function EventEditorTitles({ eventId, cue, flag, title, note, colour }: EventEditorTitlesProps) {
   const { updateEntry } = useEntryActionsContext();
+  const { layoutMode } = useEditorLayout();
+  const showEventId = layoutMode !== EditorLayoutMode.SIMPLE;
 
   const cueSubmitHandler = (_field: string, newValue: string) => {
     updateEntry({ id: eventId, cue: sanitiseCue(newValue) });
@@ -40,10 +43,12 @@ function EventEditorTitles({ eventId, cue, flag, title, note, colour }: EventEdi
     <div className={style.column}>
       <Editor.Title>Event Data</Editor.Title>
       <div className={style.splitThree}>
-        <div>
-          <Editor.Label htmlFor='eventId'>Event ID (read only)</Editor.Label>
-          <Input id='eventId' data-testid='input-textfield' value={eventId} readOnly fluid />
-        </div>
+        {showEventId && (
+          <div>
+            <Editor.Label htmlFor='eventId'>Event ID (read only)</Editor.Label>
+            <Input id='eventId' data-testid='input-textfield' value={eventId} readOnly fluid />
+          </div>
+        )}
         <EntryEditorTextInput
           field='cue'
           label='Cue'

@@ -28,8 +28,8 @@ function MessageControlExport() {
 
   return (
     <ProtectRoute permission='editor'>
-      <Editor.Panel className={style.growPanel} data-testid='panel-messages-control'>
-        {!isExtracted && <Editor.CornerExtract onClick={(event) => handleLinks('messagecontrol', event)} />}
+      <Editor.Panel className={cx([style.growPanel, useSimple && collapsed && style.collapsedPanel])} data-testid='panel-messages-control'>
+        {!isExtracted && layoutMode !== EditorLayoutMode.SIMPLE && <Editor.CornerExtract onClick={(event) => handleLinks('messagecontrol', event)} />}
         {isExtracted && <ViewNavigationMenu suppressSettings isNavigationLocked={getIsNavigationLocked()} />}
 
         {useSimple && (

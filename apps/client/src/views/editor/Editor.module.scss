@@ -11,6 +11,19 @@ $max-playback-width: 30rem;
   min-height: 0;
 }
 
+.panelContainerSimple {
+  flex-direction: column;
+  min-height: 0;
+}
+
+.simpleContent {
+  flex: 1 1 auto;
+  display: flex;
+  gap: $panel-gap;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .panelContainerTracking {
   flex-direction: column;
   min-height: 0;
@@ -20,9 +33,15 @@ $max-playback-width: 30rem;
   flex: 1 2 auto; /* flex-grow: 1, flex-shrink: 2, flex-basis: auto */
   min-width: $min-playback-width;
   max-width: $max-playback-width;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: $panel-gap;
+
+  &[data-collapsed='true'] {
+    display: none;
+  }
 }
 
 .rundownLayout {

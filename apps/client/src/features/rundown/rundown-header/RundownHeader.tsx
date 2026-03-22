@@ -22,6 +22,7 @@ interface RundownHeaderProps {
 
 interface HeaderControlsConfig {
   showRunEditToggle: boolean;
+  showViewModeToggle: boolean;
   showOffsetToggle: boolean;
   showOverflowMenu: boolean;
 }
@@ -29,21 +30,25 @@ interface HeaderControlsConfig {
 export const HEADER_CONTROLS_CONFIG: Record<EditorLayoutMode, HeaderControlsConfig> = {
   [EditorLayoutMode.CONTROL]: {
     showRunEditToggle: true,
+    showViewModeToggle: true,
     showOffsetToggle: true,
     showOverflowMenu: true,
   },
   [EditorLayoutMode.PLANNING]: {
     showRunEditToggle: false,
+    showViewModeToggle: true,
     showOffsetToggle: false,
     showOverflowMenu: true,
   },
   [EditorLayoutMode.SIMPLE]: {
     showRunEditToggle: true,
+    showViewModeToggle: false,
     showOffsetToggle: true,
     showOverflowMenu: true,
   },
   [EditorLayoutMode.TRACKING]: {
     showRunEditToggle: false,
+    showViewModeToggle: true,
     showOffsetToggle: true,
     showOverflowMenu: false,
   },
@@ -55,7 +60,7 @@ function RundownHeader({ isExtracted, viewMode, setViewMode }: RundownHeaderProp
   const offsetMode = useOffsetMode();
   const { layoutMode } = useEditorLayout();
 
-  const { showRunEditToggle, showOffsetToggle, showOverflowMenu } = HEADER_CONTROLS_CONFIG[layoutMode];
+  const { showRunEditToggle, showViewModeToggle, showOffsetToggle, showOverflowMenu } = HEADER_CONTROLS_CONFIG[layoutMode];
 
   const toggleAppMode = (mode: AppMode[]) => {
     // we need to stop user from deselecting a mode
@@ -95,20 +100,22 @@ function RundownHeader({ isExtracted, viewMode, setViewMode }: RundownHeaderProp
         </ToggleGroup>
       )}
 
-      <ToggleGroup value={[viewMode]} onValueChange={toggleViewMode} className={style.group}>
-        <Tooltip
-          text='View rundown in list mode'
-          render={<Toolbar.Button render={<Toggle />} value={RundownViewMode.List} className={style.radioButton} />}
-        >
-          List
-        </Tooltip>
-        <Tooltip
-          text='View rundown in table mode'
-          render={<Toolbar.Button render={<Toggle />} value={RundownViewMode.Table} className={style.radioButton} />}
-        >
-          Table
-        </Tooltip>
-      </ToggleGroup>
+      {showViewModeToggle && (
+        <ToggleGroup value={[viewMode]} onValueChange={toggleViewMode} className={style.group}>
+          <Tooltip
+            text='View rundown in list mode'
+            render={<Toolbar.Button render={<Toggle />} value={RundownViewMode.List} className={style.radioButton} />}
+          >
+            List
+          </Tooltip>
+          <Tooltip
+            text='View rundown in table mode'
+            render={<Toolbar.Button render={<Toggle />} value={RundownViewMode.Table} className={style.radioButton} />}
+          >
+            Table
+          </Tooltip>
+        </ToggleGroup>
+      )}
 
       {showOffsetToggle && (
         <ToggleGroup value={[offsetMode]} onValueChange={toggleOffsetMode} className={style.group}>

@@ -25,7 +25,7 @@ function EditorOverview({ children }: PropsWithChildren) {
       {layoutMode === EditorLayoutMode.PLANNING && <OverviewPlanning />}
       {layoutMode === EditorLayoutMode.TRACKING && <OverviewTracking />}
       {layoutMode === EditorLayoutMode.CONTROL && <OverviewControl />}
-      {layoutMode === EditorLayoutMode.SIMPLE && <OverviewControl />}
+      {layoutMode === EditorLayoutMode.SIMPLE && <OverviewSimple />}
     </OverviewWrapper>
   );
 }
@@ -52,6 +52,20 @@ function OverviewTracking() {
         <OffsetOverview />
       </div>
       <MetadataTimes />
+      <ClockOverview />
+    </>
+  );
+}
+
+function OverviewSimple() {
+  return (
+    <>
+      <TitleOverview />
+      <div className={style.inline}>
+        <StartTimesRuntime />
+        <ProgressOverview />
+        <OffsetOverview />
+      </div>
       <ClockOverview />
     </>
   );

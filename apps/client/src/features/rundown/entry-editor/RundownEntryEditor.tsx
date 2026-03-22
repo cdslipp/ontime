@@ -2,8 +2,10 @@ import { OntimeEntry, isOntimeEvent, isOntimeGroup, isOntimeMilestone } from 'on
 import { useMemo } from 'react';
 
 import useRundown from '../../../common/hooks-query/useRundown';
+import { EditorLayoutMode, useEditorLayout } from '../../../views/editor/useEditorLayout';
 import { useEventSelection } from '../useEventSelection';
 import EventEditorFooter from './composite/EventEditorFooter';
+import TimeSummary from './composite/TimeSummary';
 import EventEditor from './EventEditor';
 import EventEditorEmpty from './EventEditorEmpty';
 import GroupEditor from './GroupEditor';
@@ -14,6 +16,9 @@ import style from './EntryEditor.module.scss';
 export default function RundownEntryEditor() {
   const selectedEvents = useEventSelection((state) => state.selectedEvents);
   const { data } = useRundown();
+  const { layoutMode } = useEditorLayout();
+
+  const isSimple = layoutMode === EditorLayoutMode.SIMPLE;
 
   const entry = useMemo<OntimeEntry | null>(() => {
     if (data.order.length === 0) {
@@ -30,12 +35,16 @@ export default function RundownEntryEditor() {
   }, [data.order.length, data.entries, selectedEvents]);
 
   if (!entry) {
+    if (isSimple) {
+      return <TimeSummary standalone />;
+    }
     return <EventEditorEmpty />;
   }
 
   if (isOntimeEvent(entry)) {
     return (
       <div className={style.rundownEditor} data-testid='editor-container'>
+        {isSimple && <TimeSummary />}
         <EventEditor event={entry} />
         <EventEditorFooter id={entry.id} cue={entry.cue} />
       </div>
@@ -45,6 +54,7 @@ export default function RundownEntryEditor() {
   if (isOntimeMilestone(entry)) {
     return (
       <div className={style.rundownEditor} data-testid='editor-container'>
+        {isSimple && <TimeSummary />}
         <MilestoneEditor milestone={entry} />
       </div>
     );
@@ -53,6 +63,7 @@ export default function RundownEntryEditor() {
   if (isOntimeGroup(entry)) {
     return (
       <div className={style.rundownEditor} data-testid='editor-container'>
+        {isSimple && <TimeSummary />}
         <GroupEditor group={entry} />
       </div>
     );

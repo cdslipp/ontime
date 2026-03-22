@@ -22,10 +22,10 @@ function TimerControlExport() {
   return (
     <ProtectRoute permission='editor'>
       <Editor.Panel data-testid='panel-timer-control'>
-        {!isExtracted && <Editor.CornerExtract onClick={(event) => handleLinks('timercontrol', event)} />}
+        {!isExtracted && layoutMode !== EditorLayoutMode.SIMPLE && <Editor.CornerExtract onClick={(event) => handleLinks('timercontrol', event)} />}
         {isExtracted && <ViewNavigationMenu suppressSettings isNavigationLocked={getIsNavigationLocked()} />}
 
-        <div className={style.content}>
+        <div className={useSimple ? style.contentSimple : style.content}>
           <ErrorBoundary>
             {useSimple ? <SimplePlaybackControl /> : <PlaybackControl />}
           </ErrorBoundary>

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 
 import ScrollArea from '../../../common/components/scroll-area/ScrollArea';
+import { cx } from '../../../common/utils/styleUtils';
 import useRundown from '../../../common/hooks-query/useRundown';
 import { useSelectedEventId } from '../../../common/hooks/useSocket';
 import { ExtendedEntry, getFlatRundownMetadata } from '../../../common/utils/rundownMetadata';
@@ -17,9 +18,10 @@ import style from './TitleList.module.scss';
 
 interface TitleListProps {
   mode: AppMode;
+  className?: string;
 }
 
-export default function TitleList({ mode }: TitleListProps) {
+export default function TitleList({ mode, className }: TitleListProps) {
   const { data: rundown } = useRundown();
   const selectedEventId = useSelectedEventId();
   const cursor = useEventSelection((state) => state.cursor);
@@ -43,6 +45,7 @@ export default function TitleList({ mode }: TitleListProps) {
   return (
     <TitleListContent
       mode={mode}
+      className={className}
       eventData={eventData}
       selectedEventId={selectedEventId}
       resolvedFollowEventId={resolvedFollowEventId}
@@ -53,6 +56,7 @@ export default function TitleList({ mode }: TitleListProps) {
 
 interface TitleListContentProps {
   mode: AppMode;
+  className?: string;
   eventData: ExtendedEntry<OntimeEvent>[];
   selectedEventId: string | null;
   resolvedFollowEventId: string | null;
@@ -61,6 +65,7 @@ interface TitleListContentProps {
 
 function TitleListContent({
   mode,
+  className,
   eventData,
   selectedEventId,
   resolvedFollowEventId,
@@ -131,7 +136,7 @@ function TitleListContent({
   );
 
   return (
-    <ScrollArea className={style.container} ref={scrollParentRef}>
+    <ScrollArea className={cx([style.container, className])} ref={scrollParentRef}>
       <Virtuoso
         ref={virtuosoRef}
         data={eventData}
