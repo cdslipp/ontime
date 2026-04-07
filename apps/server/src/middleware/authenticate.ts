@@ -16,6 +16,7 @@ import { noopMiddleware } from './noop.js';
 const publicAssets = new Set([
   '/favicon.ico',
   '/manifest.json',
+  '/manifest.webmanifest',
   '/ontime-logo.png',
   '/robots.txt',
   '/site.webmanifest',

@@ -43,6 +43,7 @@
     "lint": "oxlint --quiet --type-aware",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
     "build": "vite build",
+    "preview": "vite preview --port 4173",
     "test": "vitest",
     "test:pipeline": "vitest run",
     "analyse": "npx vite-bundle-visualizer"
@@ -72,6 +73,7 @@
     "typescript": "catalog:",
     "vite": "8.0.1",
     "vite-plugin-compression2": "2.5.1",
+    "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-svgr": "4.5.0",
     "vite-tsconfig-paths": "6.1.1",
     "vitest": "catalog:"

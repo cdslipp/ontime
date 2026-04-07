@@ -4,6 +4,7 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { compression } from 'vite-plugin-compression2';
+import { VitePWA } from 'vite-plugin-pwa';
 import svgrPlugin from 'vite-plugin-svgr';
 
 import { ONTIME_VERSION } from './src/ONTIME_VERSION';
@@ -47,6 +48,39 @@ export default defineConfig({
     compression({
       algorithm: 'brotliCompress',
       exclude: /\.(html)$/, // Ontime cloud: Exclude HTML files from compression so we can change the base property at runtime
+    }),
+    VitePWA({
+      registerType: 'autoUpdate',
+      // Disable service worker in development to avoid conflicts with HMR
+      disable: process.env.NODE_ENV === 'development',
+      // Disable manifest generation - server provides dynamic manifest
+      manifest: false,
+      // Minimal workbox config - network-only since Ontime requires LAN connection
+      workbox: {
+        // Don't precache any assets - we want fresh files from the server
+        globPatterns: [],
+        // Runtime caching: only cache the app shell for installability
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => {
+              // Cache only the root HTML for app shell
+              return url.pathname === '/' || url.pathname === '/index.html';
+            },
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'app-shell',
+              networkTimeoutSeconds: 3,
+              expiration: {
+                maxEntries: 1,
+                maxAgeSeconds: 24 * 60 * 60, // 1 day
+              },
+            },
+          },
+        ],
+        // Skip waiting to activate new service worker immediately
+        skipWaiting: true,
+        clientsClaim: true,
+      },
     }),
   ],
   server: {

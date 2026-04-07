@@ -21,6 +21,7 @@ import { updateRouterPrefix } from './externals.js';
 import { makeAuthenticateMiddleware, makeLoginRouter } from './middleware/authenticate.js';
 // Import middleware configuration
 import { bodyParser } from './middleware/bodyParser.js';
+import { dynamicManifestHandler } from './middleware/dynamicManifest.js';
 import { compressedStatic } from './middleware/staticGZip.js';
 import { ONTIME_VERSION } from './ONTIME_VERSION.js';
 import { getShowWelcomeDialog } from './services/app-state-service/AppStateService.js';
@@ -112,6 +113,10 @@ app.use(`${prefix}/external`, (req, res) => {
   res.status(404).send(`${req.originalUrl} not found`);
 });
 app.use(`${prefix}/user`, express.static(publicDir.userDir, { etag: false, lastModified: true }));
+
+// Dynamic manifest route - must be before static files to allow dynamic generation
+app.get(`${prefix}/manifest.webmanifest`, dynamicManifestHandler(prefix));
+app.get(`${prefix}/manifest.json`, dynamicManifestHandler(prefix));
 
 // Base route for static files
 app.use(`${prefix}`, authenticateAndRedirect, compressedStatic);
