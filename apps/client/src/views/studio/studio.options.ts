@@ -47,6 +47,7 @@ export const getStudioOptions = (timeFormat: string, customFields: CustomFields)
 type StudioOptions = {
   mainSource: keyof OntimeEvent | null;
   hideCards: boolean;
+  timeFormat?: string;
 };
 
 /**
@@ -60,6 +61,7 @@ function getOptionsFromParams(searchParams: URLSearchParams, defaultValues?: URL
   return {
     mainSource: getValue('main') as keyof OntimeEvent | null,
     hideCards: isStringBoolean(getValue('hideCards')),
+    timeFormat: getValue('timeformat') ?? undefined,
   };
 }
 

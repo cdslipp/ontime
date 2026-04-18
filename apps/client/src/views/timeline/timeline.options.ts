@@ -55,6 +55,7 @@ type TimelineOptions = {
   mainSource: keyof OntimeEvent | null;
   hidePast: boolean;
   fixedSize: boolean;
+  timeFormat?: string;
 };
 
 /**
@@ -69,6 +70,7 @@ function getOptionsFromParams(searchParams: URLSearchParams, defaultValues?: URL
     mainSource: getValue('main') as keyof OntimeEvent | null,
     hidePast: isStringBoolean(getValue('hidePast')),
     fixedSize: isStringBoolean(getValue('fixedSize')),
+    timeFormat: getValue('timeformat') ?? undefined,
   };
 }
 

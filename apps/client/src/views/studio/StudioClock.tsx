@@ -15,9 +15,10 @@ const secondsIndicators = [...Array(60).keys()];
 
 interface StudioClockProps {
   hideCards: boolean;
+  timeFormat?: string;
 }
 
-export default function StudioClock({ hideCards }: StudioClockProps) {
+export default function StudioClock({ hideCards, timeFormat }: StudioClockProps) {
   const isSmallScreen = useIsSmallScreen();
   const clock = useAutoTickingClock();
   const { playback } = useStudioClockSocket();
@@ -25,10 +26,10 @@ export default function StudioClock({ hideCards }: StudioClockProps) {
 
   // if we are on mobile and have to show the cards
   if (isSmallScreen && !hideCards) {
-    return <StudioClockMobile clock={clock} onAir={onAir} />;
+    return <StudioClockMobile clock={clock} onAir={onAir} timeFormat={timeFormat} />;
   }
 
-  const { seconds, display, meridian } = getLargeClockData(clock);
+  const { seconds, display, meridian } = getLargeClockData(clock, timeFormat);
 
   return (
     <div className='studio__clock'>
@@ -62,10 +63,11 @@ export default function StudioClock({ hideCards }: StudioClockProps) {
 interface StudioClockMobileProps {
   clock: number;
   onAir: boolean;
+  timeFormat?: string;
 }
 
-function StudioClockMobile({ clock, onAir }: StudioClockMobileProps) {
-  const displayClock = formatTime(clock);
+function StudioClockMobile({ clock, onAir, timeFormat }: StudioClockMobileProps) {
+  const displayClock = formatTime(clock, timeFormat ? { format12: timeFormat, format24: timeFormat } : undefined);
 
   return (
     <div className='studio__clock studio__clock--small'>

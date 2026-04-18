@@ -71,6 +71,7 @@ type BackstageOptions = {
   mainSource: keyof OntimeEvent | null;
   secondarySource: keyof OntimeEvent | null;
   extraInfo: string | null;
+  timeFormat?: string;
 };
 
 /**
@@ -85,6 +86,7 @@ function getOptionsFromParams(searchParams: URLSearchParams, defaultValues?: URL
     mainSource: getValue('main') as keyof OntimeEvent | null,
     secondarySource: getValue('secondary-src') as keyof OntimeEvent | null,
     extraInfo: getValue('extra-info'),
+    timeFormat: getValue('timeformat') ?? undefined,
   };
 }
 

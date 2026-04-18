@@ -2,6 +2,7 @@ import { EntryId, MaybeNumber, OffsetMode, OntimeEntry, OntimeEvent, OntimeRepor
 import { MILLIS_PER_MINUTE, getExpectedStart, millisToString, removeLeadingZero } from 'ontime-utils';
 
 import { useCountdownSocket } from '../../common/hooks/useSocket';
+import { useTimeFormat } from '../../common/hooks/useTimeFormat';
 import { ExtendedEntry } from '../../common/utils/rundownMetadata';
 import { formatDuration, formatTime } from '../../common/utils/time';
 import { type TranslationKey, useTranslation } from '../../translation/TranslationProvider';
@@ -44,6 +45,7 @@ export function useSubscriptionDisplayData(
 ): { status: ProgressStatus; statusDisplay: string; timeDisplay: string } {
   const { playback, current, clock } = useCountdownSocket();
   const { getLocalizedString } = useTranslation();
+  const timeFormatOverride = useTimeFormat();
 
   const bigDuration = (value: number) => {
     if (value <= 0) return getLocalizedString('countdown.overtime').toUpperCase();
@@ -81,10 +83,13 @@ export function useSubscriptionDisplayData(
   }
 
   if (subscribedEvent.isPast) {
+    const options = timeFormatOverride
+      ? { format12: timeFormatOverride, format24: timeFormatOverride }
+      : { format12: preferredFormat12, format24: preferredFormat24 };
     return {
       status: 'done',
       statusDisplay: getLocalizedString(timerProgress['done']),
-      timeDisplay: formatTime(subscribedEvent.endedAt, { format12: preferredFormat12, format24: preferredFormat24 }),
+      timeDisplay: formatTime(subscribedEvent.endedAt, options),
     };
   }
 

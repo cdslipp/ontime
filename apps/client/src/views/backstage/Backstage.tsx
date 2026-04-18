@@ -16,6 +16,7 @@ import { useWindowTitle } from '../../common/hooks/useWindowTitle';
 import { cx, timerPlaceholderMin } from '../../common/utils/styleUtils';
 import { formatTime, getDefaultFormat } from '../../common/utils/time';
 import { useTranslation } from '../../translation/TranslationProvider';
+import { useTimeFormat } from '../../common/hooks/useTimeFormat';
 import Loader from '../common/loader/Loader';
 import ScheduleExport from '../common/schedule/ScheduleExport';
 import SuperscriptTime from '../common/superscript-time/SuperscriptTime';
@@ -43,7 +44,7 @@ export default function BackstageLoader() {
 
 function Backstage({ events, customFields, projectData, isMirrored, settings }: BackstageData) {
   const { getLocalizedString } = useTranslation();
-  const { mainSource, secondarySource, extraInfo } = useBackstageOptions();
+  const { mainSource, secondarySource, extraInfo, timeFormat } = useBackstageOptions();
   const { eventNext, eventNow, rundown, selectedEventId, time } = useBackstageSocket();
   const [blinkClass, setBlinkClass] = useState(false);
   const { height: screenHeight } = useViewportSize();
@@ -69,19 +70,25 @@ function Backstage({ events, customFields, projectData, isMirrored, settings }: 
     time.playback,
   );
 
+  const formatOptions = timeFormat ? { format12: timeFormat, format24: timeFormat } : undefined;
+
   // gather timer data
   const isPendingStart = getIsPendingStart(time.playback, time.phase);
-  const startedAt = isPendingStart ? formatTime(time.secondaryTimer) : formatTime(time.startedAt);
+  const startedAt = isPendingStart
+    ? formatTime(time.secondaryTimer, formatOptions)
+    : formatTime(time.startedAt, formatOptions);
 
   const scheduledStart = (() => {
     if (showNow) return undefined;
     if (!hasEvents) return undefined;
+    if (timeFormat) return formatTime(rundown.plannedStart, formatOptions);
     return formatTime(rundown.plannedStart, { format12: 'h:mm a', format24: 'HH:mm' });
   })();
 
   const scheduledEnd = (() => {
     if (showNow) return undefined;
     if (!hasEvents) return undefined;
+    if (timeFormat) return formatTime(rundown.plannedEnd, formatOptions);
     return formatTime(rundown.plannedEnd, { format12: 'h:mm a', format24: 'HH:mm' });
   })();
 
@@ -131,7 +138,10 @@ function Backstage({ events, customFields, projectData, isMirrored, settings }: 
                 {isOvertime(time.current) ? (
                   <div className='time-entry__value'>{getLocalizedString('countdown.overtime')}</div>
                 ) : (
-                  <SuperscriptTime time={formatTime(time.expectedFinish)} className='time-entry__value' />
+                  <SuperscriptTime
+                    time={formatTime(time.expectedFinish, formatOptions)}
+                    className='time-entry__value'
+                  />
                 )}
               </div>
               <div className='timer-gap' />
@@ -216,9 +226,10 @@ function ExtraInfo({ projectData, size, source }: ExtraInfoProps) {
 function BackstageClock() {
   const { getLocalizedString } = useTranslation();
   const clock = useAutoTickingClock();
+  const timeFormat = useTimeFormat();
 
   // gather timer data
-  const formattedClock = formatTime(clock);
+  const formattedClock = formatTime(clock, timeFormat ? { format12: timeFormat, format24: timeFormat } : undefined);
 
   return (
     <div className='clock-container'>

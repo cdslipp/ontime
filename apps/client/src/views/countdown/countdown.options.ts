@@ -91,6 +91,7 @@ type CountdownOptions = {
   secondarySource: keyof OntimeEvent | null;
   showExpected: boolean;
   hidePast: boolean;
+  timeFormat?: string;
 };
 
 /**
@@ -115,6 +116,7 @@ function getOptionsFromParams(searchParams: URLSearchParams, defaultValues?: URL
     secondarySource: getValue('secondary-src') as keyof OntimeEvent | null,
     showExpected: isStringBoolean(getValue('showExpected')),
     hidePast: isStringBoolean(getValue('hidePast')),
+    timeFormat: getValue('timeformat') ?? undefined,
   };
 }
 

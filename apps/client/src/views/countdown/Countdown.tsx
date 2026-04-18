@@ -12,6 +12,7 @@ import { useWindowTitle } from '../../common/hooks/useWindowTitle';
 import { ExtendedEntry } from '../../common/utils/rundownMetadata';
 import { formatTime, getDefaultFormat } from '../../common/utils/time';
 import { useTranslation } from '../../translation/TranslationProvider';
+import { useTimeFormat } from '../../common/hooks/useTimeFormat';
 import Loader from '../common/loader/Loader';
 import SuperscriptTime from '../common/superscript-time/SuperscriptTime';
 import { getCountdownOptions, useCountdownOptions } from './countdown.options';
@@ -41,7 +42,7 @@ export default function CountdownLoader() {
 
 function Countdown({ customFields, rundownData, projectData, isMirrored, settings }: CountdownData) {
   const { getLocalizedString } = useTranslation();
-  const { subscriptions } = useCountdownOptions();
+  const { subscriptions, timeFormat } = useCountdownOptions();
 
   const [editMode, setEditMode] = useState(false);
 
@@ -66,7 +67,7 @@ function Countdown({ customFields, rundownData, projectData, isMirrored, setting
       <div className='project-header'>
         {projectData?.logo && <ViewLogo name={projectData.logo} className='logo' />}
         <div className='title'>{projectData.title}</div>
-        <CountdownClock />
+        <CountdownClock timeFormat={timeFormat} />
       </div>
 
       {!hasEvents && <Empty text={getLocalizedString('common.no_data')} className='empty-container' />}
@@ -138,12 +139,12 @@ function CountdownContents({ playableEvents, subscriptions, goToEditMode }: Coun
   return <CountdownSubscriptions subscribedEvents={eventsToShow} goToEditMode={goToEditMode} />;
 }
 
-function CountdownClock() {
+function CountdownClock({ timeFormat }: { timeFormat?: string }) {
   const { getLocalizedString } = useTranslation();
   const clock = useAutoTickingClock();
 
   // gather timer data
-  const formattedClock = formatTime(clock);
+  const formattedClock = formatTime(clock, timeFormat ? { format12: timeFormat, format24: timeFormat } : undefined);
 
   return (
     <div className='clock-container'>

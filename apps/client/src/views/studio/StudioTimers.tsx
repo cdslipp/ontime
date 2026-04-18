@@ -14,19 +14,23 @@ import './StudioTimers.scss';
 
 interface StudioTimersProps {
   viewSettings: ViewSettings;
+  timeFormat?: string;
 }
 
-export default function StudioTimers({ viewSettings }: StudioTimersProps) {
+export default function StudioTimers({ viewSettings, timeFormat }: StudioTimersProps) {
   const { getLocalizedString } = useTranslation();
   const { mainSource } = useStudioOptions();
   const { eventNow, eventNext, message, time, offset, rundown, expectedRundownEnd } = useStudioTimersSocket();
 
-  const schedule = getFormattedScheduleTimes({
-    offset: offset,
-    actualStart: rundown.actualStart,
-    expectedEnd: expectedRundownEnd,
-  });
-  const event = getFormattedEventData(eventNow, time, mainSource);
+  const schedule = getFormattedScheduleTimes(
+    {
+      offset: offset,
+      actualStart: rundown.actualStart,
+      expectedEnd: expectedRundownEnd,
+    },
+    timeFormat,
+  );
+  const event = getFormattedEventData(eventNow, time, mainSource, timeFormat);
   const eventNextTitle = getPropertyValue(eventNext, mainSource ?? 'title') || '-';
   const formattedTimerMessage = (message.timer.visible && message.timer.text) || '-';
   const formattedSecondaryMessage = message.timer.secondarySource === 'secondary' ? message.secondary || '-' : '-';

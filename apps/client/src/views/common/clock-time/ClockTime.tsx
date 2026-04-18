@@ -6,6 +6,7 @@ import { MaybeNumber } from 'ontime-types';
 
 import { formatTime } from '../../../common/utils/time';
 import { FORMAT_12, FORMAT_24 } from '../../../viewerConfig';
+import { useTimeFormat } from '../../../common/hooks/useTimeFormat';
 import SuperscriptTime from '../superscript-time/SuperscriptTime';
 
 interface ClockTimeProps {
@@ -17,9 +18,13 @@ interface ClockTimeProps {
 
 export default function ClockTime(props: ClockTimeProps) {
   const { value, preferredFormat12 = FORMAT_12, preferredFormat24 = FORMAT_24, className } = props;
+  const timeFormatOverride = useTimeFormat();
 
-  // TODO: should we get the params from URL here to see if the user is overriding the default?
-  const formattedTime = formatTime(value, { format12: preferredFormat12, format24: preferredFormat24 });
+  const options = timeFormatOverride
+    ? { format12: timeFormatOverride, format24: timeFormatOverride }
+    : { format12: preferredFormat12, format24: preferredFormat24 };
+
+  const formattedTime = formatTime(value, options);
 
   return <SuperscriptTime className={className} time={formattedTime} />;
 }
